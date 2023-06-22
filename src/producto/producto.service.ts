@@ -3,6 +3,7 @@ import { CreateProductoDto, UpdateProductoDto } from './dto/producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class ProductoService {
@@ -14,7 +15,7 @@ export class ProductoService {
       const newProduct = this.productRepository.create(product)
       return await this.productRepository.save(newProduct)
     } catch (error) {
-      throw new InternalServerErrorException('no se puede crear')
+      throw new ErrorManager.createSignatureError(error.message)
     }
   }
 
@@ -22,11 +23,14 @@ export class ProductoService {
     try {
       const products: Producto[] = await this.productRepository.find()
       if ( products.length === 0){
-        throw new InternalServerErrorException('no se encontro productos')
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se encontro resultado'
+        })
       }
       return products
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 
@@ -37,12 +41,15 @@ export class ProductoService {
       .where({id})
       .getOne()
       if (!product){
-        throw new InternalServerErrorException('no se encontro resultado')
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se encontro resultado'
+        })
       }
 
       return product
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 
@@ -50,11 +57,14 @@ export class ProductoService {
     try {
       const product: UpdateResult = await this.productRepository.update(id, updatedProduct)
       if (product.affected == 0 ){
-        throw new InternalServerErrorException('no se pudo actualizar')
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se pudo actualizar'
+        })
       }
       return product
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 
@@ -62,11 +72,14 @@ export class ProductoService {
     try {
       const product: DeleteResult = await this.productRepository.delete(id)
       if (product.affected == 0 ){
-        throw new InternalServerErrorException('no se pudo borrar')
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se pudo borrar'
+        })
       }
       return product
     } catch (error) {
-      throw new InternalServerErrorException(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 }
