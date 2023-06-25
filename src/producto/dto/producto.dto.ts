@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID, IsOptional } from "class-validator";
+import { Categoria } from "src/categoria/entities/categoria.entity";
+import { Estante } from "src/estante/entities/estante.entity";
 
 
 export class CreateProductoDto {
@@ -8,6 +10,13 @@ export class CreateProductoDto {
     @IsNotEmpty()
     @IsString()
     descripcion:string;
+    @IsNotEmpty()
+    @IsUUID()
+    categoria: Categoria;
+    @IsNotEmpty()
+    @IsUUID()
+    estante: Estante;
+    
 }
 
 export class UpdateProductoDto{
@@ -17,4 +26,11 @@ export class UpdateProductoDto{
     @IsOptional()
     @IsString()
     descripcion:string;
+    @IsOptional()
+    @IsUUID()
+    categoriaid: Categoria;
+    @IsOptional()
+    @IsUUID()
+    estanteid: Estante;
+    
 }

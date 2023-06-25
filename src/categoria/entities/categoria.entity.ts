@@ -1,5 +1,7 @@
-import { BaseEntity } from "src/config/base.entity";
-import { Column, Entity } from "typeorm";
+import { BaseEntity } from "../../config/base.entity";
+import { Producto } from "../../producto/entities/producto.entity";
+import { Column, Entity, OneToMany } from "typeorm";
+
 
 @Entity()
 export class Categoria extends BaseEntity{  
@@ -7,5 +9,7 @@ export class Categoria extends BaseEntity{
     nombre:string;
     @Column()
     descripcion:string;
+    @OneToMany(()=> Producto, (producto) => producto.categoria)
+    productos: Producto[]
 }
 

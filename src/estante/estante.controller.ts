@@ -1,34 +1,35 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EstanteService } from './estante.service';
-import { CreateEstanteDto } from './dto/create-estante.dto';
-import { UpdateEstanteDto } from './dto/update-estante.dto';
+import { CreateEstanteDto, UpdateEstanteDto } from './dto/estante.dto';
+
 
 @Controller('estante')
 export class EstanteController {
   constructor(private readonly estanteService: EstanteService) {}
 
   @Post()
-  create(@Body() createEstanteDto: CreateEstanteDto) {
-    return this.estanteService.create(createEstanteDto);
+  public async create(@Body() createEstanteDto: CreateEstanteDto) {
+    return await this.estanteService.create(createEstanteDto);
+
   }
 
   @Get()
-  findAll() {
-    return this.estanteService.findAll();
+  public async findAll() {
+    return await this.estanteService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.estanteService.findOne(+id);
+  public async findOne(@Param('id') id: string) {
+    return await this.estanteService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEstanteDto: UpdateEstanteDto) {
-    return this.estanteService.update(+id, updateEstanteDto);
+  public async update(@Param('id') id: string, @Body() updateEstanteDto: UpdateEstanteDto) {
+    return await this.estanteService.update(id, updateEstanteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.estanteService.remove(+id);
+  public async remove(@Param('id') id: string) {
+    return await this.estanteService.remove(id);
   }
 }

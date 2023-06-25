@@ -33,4 +33,6 @@ export class ProductoController {
   public async remove(@Param('id') id: string) {
     return await this.productoService.remove(id);
   }
+
+  
 }

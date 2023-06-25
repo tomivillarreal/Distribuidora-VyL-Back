@@ -1,13 +1,25 @@
-import { BaseEntity } from "src/config/base.entity";
-import { Column, Entity, Timestamp } from "typeorm";
+import { BaseEntity } from "../../config/base.entity";
+import { DetalleVenta } from "../../detalle-venta/entities/detalle-venta.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, Timestamp } from "typeorm";
 
 @Entity()
-export class Estante extends BaseEntity{  
+export class Venta extends BaseEntity{  
 
-    @Column()
+    @CreateDateColumn({
+        type:'date',
+        name:'fecha'
+    })
     fecha:Date;
+    @CreateDateColumn({
+        type:'timestamp',
+        name:'hora'
+    })
+    hora:Date;
     @Column()
-    hora:Timestamp;
+    descripcion: string
 
+    @OneToMany(()=> DetalleVenta , (detalleVenta) => detalleVenta.producto)
+    detalleVenta: DetalleVenta[]
+    
 
 }

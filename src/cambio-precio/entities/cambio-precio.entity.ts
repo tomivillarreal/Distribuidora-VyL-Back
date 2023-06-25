@@ -1,13 +1,24 @@
-import { BaseEntity } from "src/config/base.entity";
-import { Column, Entity, Timestamp } from "typeorm";
+import { BaseEntity } from "../../config/base.entity";
+import { Column, Entity, Timestamp, ManyToOne, CreateDateColumn } from "typeorm";
+import { Producto } from "../../producto/entities/producto.entity";
 
 @Entity()
 export class CambioPrecio extends BaseEntity{  
 
-    @Column()
+    @CreateDateColumn({
+        type:'date',
+        name:'fecha'
+    })
     fecha:Date;
+    @CreateDateColumn({
+        type:'timestamp',
+        name:'hora'
+    })
+    hora:Date;
     @Column()
-    hora:Timestamp;
+    precio:Number;
+    @ManyToOne(()=> Producto, (producto) => producto.cambioPrecio)
+    producto: Producto
 
 
 }
