@@ -9,7 +9,6 @@ import { DetalleVenta } from "../../detalle-venta/entities/detalle-venta.entity"
 
 @Entity()
 export class Producto extends BaseEntity{  
-
     @Column()
     codigoProducto:string;
     @Column()
@@ -22,11 +21,8 @@ export class Producto extends BaseEntity{
     estante: Estante
     @OneToMany(()=> CambioPrecio , (cambioPrecio) => cambioPrecio.producto)
     cambioPrecio: CambioPrecio[]
-    
     @OneToMany(()=> DetalleCompra , (detalleCompra) => detalleCompra.producto)
     detalleCompra: DetalleCompra[]
-
-        
     @OneToMany(()=> DetalleVenta , (detalleVenta) => detalleVenta.producto)
     detalleVenta: DetalleVenta[]
 }

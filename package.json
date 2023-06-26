@@ -22,7 +22,7 @@
     "m:gen:dev": "set NODE_ENV=develop&& npm run orm:init migration:generate",
     "m:run:dev": "set NODE_ENV=develop&& npm run orm:init migration:run",
     "m:gen": "set NODE_ENV=develop&& npm run orm:init migration:generate",
-    "m:run": "set NODE_ENV=develop&& && npm run orm:init migration:run"
+    "m:run": "set NODE_ENV=develop&& npm run orm:init migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
