@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID, IsOptional } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID, IsOptional, IsNumber } from "class-validator";
 import { Categoria } from "src/categoria/entities/categoria.entity";
 import { Estante } from "src/estante/entities/estante.entity";
 
@@ -14,10 +14,10 @@ export class CreateProductoDto {
     @IsString()
     descripcion:string;
     @IsNotEmpty()
-    @IsUUID()
+    @IsNumber()
     categoria: Categoria;
     @IsNotEmpty()
-    @IsUUID()
+    @IsNumber()
     estante: Estante;
     
 }
@@ -33,10 +33,10 @@ export class UpdateProductoDto{
     @IsString()
     descripcion:string;
     @IsOptional()
-    @IsUUID()
+    @IsNumber()
     categoriaid: Categoria;
     @IsOptional()
-    @IsUUID()
+    @IsNumber()
     estanteid: Estante;
     
 }

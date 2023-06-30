@@ -10,8 +10,6 @@ import { DetalleVenta } from "../../detalle-venta/entities/detalle-venta.entity"
 @Entity()
 export class Producto extends BaseEntity{  
     @Column()
-    codigoProducto:string;
-    @Column()
     nombre:string;
     @Column()
     descripcion:string;

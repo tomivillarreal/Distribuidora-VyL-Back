@@ -3,25 +3,31 @@ import { CreateProductoDto, UpdateProductoDto } from './dto/producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../utils/error.manager';
+import { Estante } from 'src/estante/entities/estante.entity';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 
 @Injectable()
 export class ProductoService {
 
-  constructor(@InjectRepository(Producto) private productRepository: Repository<Producto>) { }
+  constructor(
+    @InjectRepository(Producto) private productRepository: Repository<Producto>,
+    ) { }
 
   public async create(product: CreateProductoDto): Promise<Producto> {
     try {
       const newProduct = this.productRepository.create(product)
       return await this.productRepository.save(newProduct)
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 
   public async findAll(): Promise<Producto[]> {
     try {
-      const products: Producto[] = await this.productRepository.find()
+      const products: Producto[] = await this.productRepository.find({
+        relations: ['estante', 'categoria'],
+      });
       if ( products.length === 0){
         throw new ErrorManager({
           type:'BAD_REQUEST',
