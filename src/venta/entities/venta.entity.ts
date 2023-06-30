@@ -5,16 +5,16 @@ import { Column, CreateDateColumn, Entity, OneToMany, Timestamp } from "typeorm"
 @Entity()
 export class Venta extends BaseEntity{  
 
-    @CreateDateColumn({
-        type:'date',
-        name:'fecha'
-    })
-    fecha:Date;
-    @CreateDateColumn({
-        type:'timestamp',
-        name:'hora'
-    })
-    hora:Date;
+    // @CreateDateColumn({
+    //     type:'date',
+    //     name:'fecha'
+    // })
+    // fecha:Date;
+    // @CreateDateColumn({
+    //     type:'timestamp',
+    //     name:'hora'
+    // })
+    // hora:Date;
     @Column()
     descripcion: string
 

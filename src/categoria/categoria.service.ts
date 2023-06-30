@@ -10,7 +10,6 @@ export class CategoriaService {
 
   constructor(@InjectRepository(Categoria) private categoriaRepository: Repository<Categoria>) { }
 
-
   public async create(categoria: CreateCategoriaDto): Promise<Categoria> {
     try {
       const newCategoria = this.categoriaRepository.create(categoria)

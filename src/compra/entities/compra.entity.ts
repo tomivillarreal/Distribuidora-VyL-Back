@@ -4,16 +4,16 @@ import { Column, Entity, CreateDateColumn, OneToMany } from "typeorm";
 
 @Entity()
 export class Compra extends BaseEntity{  
-    @CreateDateColumn({
-        type:'date',
-        name:'fecha'
-    })
-    fecha:Date;
-    @CreateDateColumn({
-        type:'timestamp',
-        name:'hora'
-    })
-    hora:Date;
+    // @CreateDateColumn({
+    //     type:'date',
+    //     name:'fecha'
+    // })
+    // fecha:Date;
+    // @CreateDateColumn({
+    //     type:'timestamp',
+    //     name:'hora'
+    // })
+    // hora:Date;
     @Column()
     descripcion: string
     @OneToMany(()=> DetalleCompra , (detalleCompra) => detalleCompra.producto)

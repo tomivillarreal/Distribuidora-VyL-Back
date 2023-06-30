@@ -1,8 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CambioPrecioService } from './cambio-precio.service';
-import { CreateCambioPrecioDto } from './dto/create-cambio-precio.dto';
-import { UpdateCambioPrecioDto } from './dto/update-cambio-precio.dto';
-
+import { CreateCambioPrecioDto } from './dto/cambio-precio.dto';
 @Controller('cambio-precio')
 export class CambioPrecioController {
   constructor(private readonly cambioPrecioService: CambioPrecioService) {}
@@ -20,11 +18,6 @@ export class CambioPrecioController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cambioPrecioService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCambioPrecioDto: UpdateCambioPrecioDto) {
-    return this.cambioPrecioService.update(+id, updateCambioPrecioDto);
   }
 
   @Delete(':id')
