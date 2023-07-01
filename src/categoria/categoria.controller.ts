@@ -16,9 +16,14 @@ export class CategoriaController {
     return this.categoriaService.findAll();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   findOne(@Param('id') id: string) {
     return this.categoriaService.findOne(id);
+  }
+
+  @Get('name/:name')
+  findOneByName(@Param('name') name: string) {
+    return this.categoriaService.findOneByName(name);
   }
 
   @Patch(':id')

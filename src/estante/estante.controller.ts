@@ -18,9 +18,14 @@ export class EstanteController {
     return await this.estanteService.findAll();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   public async findOne(@Param('id') id: string) {
     return await this.estanteService.findOne(id);
+  }
+
+  @Get('name/:name')
+  findOneByName(@Param('name') name: string) {
+    return this.estanteService.findOneByName(name);
   }
 
   @Patch(':id')

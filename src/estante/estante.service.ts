@@ -52,7 +52,24 @@ export class EstanteService {
       throw ErrorManager.createSignatureError(error.message)
     }
   }
+  public async findOneByName(name: string): Promise<Estante> {
+    try {
+      const estante: Estante = await this.estanteRepository.
+      createQueryBuilder('estante')
+      .where('estante.nombre = :name', { name })
+      .getOne()
+      if (!estante){
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se encontro resultado'
+        })
+      }
 
+      return estante
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message)
+    }
+  }
   public async update(id: string, updatedEstante: UpdateEstanteDto): Promise<UpdateResult | undefined>  {
     try {
       const estante: UpdateResult = await this.estanteRepository.update(id, updatedEstante)

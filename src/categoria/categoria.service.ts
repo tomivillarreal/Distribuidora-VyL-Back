@@ -15,7 +15,7 @@ export class CategoriaService {
       const newCategoria = this.categoriaRepository.create(categoria)
       return await this.categoriaRepository.save(newCategoria)
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message)
     }
   }
 
@@ -39,6 +39,25 @@ export class CategoriaService {
       const categoria: Categoria = await this.categoriaRepository.
       createQueryBuilder('estante')
       .where({id})
+      .getOne()
+      if (!categoria){
+        throw new ErrorManager({
+          type:'BAD_REQUEST',
+          message: 'No se encontro resultado'
+        })
+      }
+
+      return categoria
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message)
+    }
+  }
+
+  public async findOneByName(name: string): Promise<Categoria> {
+    try {
+      const categoria: Categoria = await this.categoriaRepository.
+      createQueryBuilder('categoria')
+      .where('categoria.nombre = :name', { name })
       .getOne()
       if (!categoria){
         throw new ErrorManager({

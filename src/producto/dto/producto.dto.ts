@@ -6,7 +6,7 @@ import { Estante } from "src/estante/entities/estante.entity";
 export class CreateProductoDto {
     @IsNotEmpty()
     @IsString()
-    codigoProducto:string;
+    foto:string;
     @IsNotEmpty()
     @IsString()
     nombre:string;
@@ -25,7 +25,7 @@ export class CreateProductoDto {
 export class UpdateProductoDto{
     @IsOptional()
     @IsString()
-    codigoProducto:string;
+    foto:string;
     @IsOptional()
     @IsString()
     nombre:string;
