@@ -82,7 +82,6 @@ export class ProductoService {
 
   public async update(id: string, updatedProduct: UpdateProductoDto): Promise<UpdateResult | undefined>  {
     try {
-
       const product: UpdateResult = await this.productRepository.update(id, updatedProduct)
       if (product.affected == 0 ){
         console.log("No se actualizo")
