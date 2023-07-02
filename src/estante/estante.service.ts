@@ -52,6 +52,7 @@ export class EstanteService {
       throw ErrorManager.createSignatureError(error.message)
     }
   }
+  
   public async findOneByName(name: string): Promise<Estante> {
     try {
       const estante: Estante = await this.estanteRepository.
@@ -70,6 +71,7 @@ export class EstanteService {
       throw ErrorManager.createSignatureError(error.message)
     }
   }
+
   public async update(id: string, updatedEstante: UpdateEstanteDto): Promise<UpdateResult | undefined>  {
     try {
       const estante: UpdateResult = await this.estanteRepository.update(id, updatedEstante)

@@ -6,6 +6,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from '../utils/error.manager';
 import { Estante } from 'src/estante/entities/estante.entity';
 import { Categoria } from 'src/categoria/entities/categoria.entity';
+import { urlToHttpOptions } from 'url';
 
 @Injectable()
 export class ProductoService {
@@ -23,10 +24,30 @@ export class ProductoService {
     }
   }
 
-  public async findAll(): Promise<Producto[]> {
+  public async findAllByEstante(idEstante:number): Promise<Producto[]> {
     try {
       const products: Producto[] = await this.productRepository.find({
         relations: ['estante', 'categoria'],
+        where: {
+          estante: {id: idEstante}
+        }
+      })
+          if (!products){
+            throw new ErrorManager({
+              type:'BAD_REQUEST',
+              message: 'No se encontro resultado'
+            })
+          }
+          return products
+        } catch (error) {
+          throw ErrorManager.createSignatureError(error.message)
+        }
+      }
+
+  public async findAll(): Promise<Producto[]> {
+    try {
+      const products: Producto[] = await this.productRepository.find({
+        relations: ['estante', 'categoria']
       });
       if ( products.length === 0){
         throw new ErrorManager({
@@ -61,8 +82,10 @@ export class ProductoService {
 
   public async update(id: string, updatedProduct: UpdateProductoDto): Promise<UpdateResult | undefined>  {
     try {
+
       const product: UpdateResult = await this.productRepository.update(id, updatedProduct)
       if (product.affected == 0 ){
+        console.log("No se actualizo")
         throw new ErrorManager({
           type:'BAD_REQUEST',
           message: 'No se pudo actualizar'
@@ -72,6 +95,7 @@ export class ProductoService {
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message)
     }
+
   }
 
   public async remove(id: string): Promise<DeleteResult | undefined>  {
