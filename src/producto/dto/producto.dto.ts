@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsUUID, IsOptional, IsNumber } from "class-validator";
+import { CambioPrecio } from "src/cambio-precio/entities/cambio-precio.entity";
 import { Categoria } from "src/categoria/entities/categoria.entity";
 import { Estante } from "src/estante/entities/estante.entity";
 
@@ -19,10 +20,15 @@ export class CreateProductoDto {
     @IsNotEmpty()
     @IsNumber()
     estante: Estante;
-    
+    @IsNotEmpty()
+    @IsNumber()
+    precio: number;
 }
 
 export class UpdateProductoDto{
+    @IsOptional()
+    @IsString()
+    id:number;
     @IsOptional()
     @IsString()
     foto:string;
@@ -34,9 +40,13 @@ export class UpdateProductoDto{
     descripcion:string;
     @IsOptional()
     @IsNumber()
-    categoriaid: Categoria;
+    categoria: Categoria;
     @IsOptional()
     @IsNumber()
-    estanteid: Estante;
+    estante: Estante;
+    @IsNotEmpty()
+    @IsNumber()
+    precio: number;
+    updatedAt: Date;
     
 }

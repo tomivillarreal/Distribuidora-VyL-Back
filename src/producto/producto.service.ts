@@ -1,18 +1,17 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { CreateProductoDto, UpdateProductoDto } from './dto/producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from '../utils/error.manager';
-import { Estante } from 'src/estante/entities/estante.entity';
-import { Categoria } from 'src/categoria/entities/categoria.entity';
-import { urlToHttpOptions } from 'url';
+
 
 @Injectable()
 export class ProductoService {
 
   constructor(
-    @InjectRepository(Producto) private productRepository: Repository<Producto>,
+    @InjectRepository(Producto) 
+    private readonly productRepository: Repository<Producto>,
     ) { }
 
   public async create(product: CreateProductoDto): Promise<Producto> {
@@ -61,12 +60,13 @@ export class ProductoService {
     }
   }
 
-  public async findOne(id: string): Promise<Producto> {
+  public async findOne(idProducto: number): Promise<Producto> {
     try {
-      const product: Producto = await this.productRepository.
-      createQueryBuilder('product')
-      .where({id})
-      .getOne()
+      const product: Producto = await this.productRepository.findOne({
+        relations: ['estante', 'categoria'],
+        where: {id: idProducto}
+      })
+
       if (!product){
         throw new ErrorManager({
           type:'BAD_REQUEST',
@@ -80,8 +80,9 @@ export class ProductoService {
     }
   }
 
-  public async update(id: string, updatedProduct: UpdateProductoDto): Promise<UpdateResult | undefined>  {
+  public async update(id: number, updatedProduct: UpdateProductoDto): Promise<UpdateResult | undefined>  {
     try {
+      updatedProduct.updatedAt = new Date();
       const product: UpdateResult = await this.productRepository.update(id, updatedProduct)
       if (product.affected == 0 ){
         console.log("No se actualizo")
@@ -90,8 +91,10 @@ export class ProductoService {
           message: 'No se pudo actualizar'
         })
       }
+      console.log("Se actualizo")
       return product
     } catch (error) {
+      console.log(error.message)
       throw ErrorManager.createSignatureError(error.message)
     }
 
