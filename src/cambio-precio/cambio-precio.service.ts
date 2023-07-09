@@ -19,6 +19,7 @@ export class CambioPrecioService {
       const newCambioPrecio = this.cambioPrecioRepository.create(cambioPrecio);
       return await this.cambioPrecioRepository.save(newCambioPrecio)
     } catch (error) {
+      console.log(error.message)
       throw ErrorManager.createSignatureError(error.message)
     }
   }

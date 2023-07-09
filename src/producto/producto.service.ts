@@ -43,10 +43,11 @@ export class ProductoService {
         }
       }
 
+      
   public async findAll(): Promise<Producto[]> {
     try {
       const products: Producto[] = await this.productRepository.find({
-        relations: ['estante', 'categoria']
+        relations: ['estante', 'categoria', 'cambioPrecio'],
       });
       if ( products.length === 0){
         throw new ErrorManager({
@@ -59,6 +60,32 @@ export class ProductoService {
       throw ErrorManager.createSignatureError(error.message)
     }
   }
+
+
+  // public async findAll(): Promise<Producto[]> {
+  //   try {
+  //     const products: Producto[] = await this.productRepository
+  //     .createQueryBuilder('producto')
+  //     .innerJoin(
+  //       'producto.cambioPrecio',
+  //       'cambioPrecio').
+  //       innerJoin(
+  //         'producto.estante',
+  //         'estante'
+  //       )
+  //     .getMany()
+  //     ;
+  //     if ( products.length === 0){
+  //       throw new ErrorManager({
+  //         type:'BAD_REQUEST',
+  //         message: 'No se encontro resultado'
+  //       })
+  //     }
+  //     return products
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message)
+  //   }
+  // }
 
   public async findOne(idProducto: number): Promise<Producto> {
     try {

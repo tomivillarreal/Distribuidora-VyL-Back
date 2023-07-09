@@ -20,9 +20,6 @@ export class CreateProductoDto {
     @IsNotEmpty()
     @IsNumber()
     estante: Estante;
-    @IsNotEmpty()
-    @IsNumber()
-    precio: number;
 }
 
 export class UpdateProductoDto{
@@ -44,9 +41,6 @@ export class UpdateProductoDto{
     @IsOptional()
     @IsNumber()
     estante: Estante;
-    @IsNotEmpty()
-    @IsNumber()
-    precio: number;
     updatedAt: Date;
     
 }
