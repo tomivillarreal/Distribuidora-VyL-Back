@@ -7,99 +7,106 @@ import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class CategoriaService {
-
-  constructor(@InjectRepository(Categoria) private categoriaRepository: Repository<Categoria>) { }
+  constructor(
+    @InjectRepository(Categoria)
+    private categoriaRepository: Repository<Categoria>,
+  ) {}
 
   public async create(categoria: CreateCategoriaDto): Promise<Categoria> {
     try {
-      const newCategoria = this.categoriaRepository.create(categoria)
-      return await this.categoriaRepository.save(newCategoria)
+      const newCategoria = this.categoriaRepository.create(categoria);
+      return await this.categoriaRepository.save(newCategoria);
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findAll(): Promise<Categoria[]> {
     try {
-      const categorias: Categoria[] = await this.categoriaRepository.find()
-      if (categorias.length === 0){
+      const categorias: Categoria[] = await this.categoriaRepository.find();
+      if (categorias.length === 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
-      return categorias
+      return categorias;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findOne(id: string): Promise<Categoria> {
     try {
-      const categoria: Categoria = await this.categoriaRepository.
-      createQueryBuilder('estante')
-      .where({id})
-      .getOne()
-      if (!categoria){
+      const categoria: Categoria = await this.categoriaRepository
+        .createQueryBuilder('estante')
+        .where({ id })
+        .getOne();
+      if (!categoria) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
 
-      return categoria
+      return categoria;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findOneByName(name: string): Promise<Categoria> {
     try {
-      const categoria: Categoria = await this.categoriaRepository.
-      createQueryBuilder('categoria')
-      .where('categoria.nombre = :name', { name })
-      .getOne()
-      if (!categoria){
+      const categoria: Categoria = await this.categoriaRepository
+        .createQueryBuilder('categoria')
+        .where('categoria.nombre = :name', { name })
+        .getOne();
+      if (!categoria) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
 
-      return categoria
+      return categoria;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-
-  public async update(id: string, updatedCategoria: UpdateCategoriaDto): Promise<UpdateResult | undefined>  {
+  public async update(
+    id: string,
+    updatedCategoria: UpdateCategoriaDto,
+  ): Promise<UpdateResult | undefined> {
     try {
-      const categoria: UpdateResult = await this.categoriaRepository.update(id, updatedCategoria)
-      if (categoria.affected == 0 ){
+      const categoria: UpdateResult = await this.categoriaRepository.update(
+        id,
+        updatedCategoria,
+      );
+      if (categoria.affected == 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se pudo actualizar'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se pudo actualizar',
+        });
       }
-      return categoria
+      return categoria;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async remove(id: string): Promise<DeleteResult | undefined>  {
+  public async remove(id: string): Promise<DeleteResult | undefined> {
     try {
-      const categoria: DeleteResult = await this.categoriaRepository.delete(id)
-      if (categoria.affected == 0 ){
+      const categoria: DeleteResult = await this.categoriaRepository.delete(id);
+      if (categoria.affected == 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se pudo borrar'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se pudo borrar',
+        });
       }
-      return categoria
+      return categoria;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 }
