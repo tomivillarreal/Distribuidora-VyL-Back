@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CambioPrecioService } from './cambio-precio.service';
 import { CreateCambioPrecioDto } from './dto/cambio-precio.dto';
 import { CambioPrecio } from './entities/cambio-precio.entity';

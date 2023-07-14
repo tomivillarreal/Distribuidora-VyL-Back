@@ -58,6 +58,23 @@ export class ProductoService {
     }
   }
 
+  public async findAllVenta(): Promise<Producto[]> {
+    try {
+      const products: Producto[] = await this.productRepository.find({
+        relations: ['cambioPrecio'],
+      });
+      if (products.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return products;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   // public async findAll(): Promise<Producto[]> {
   //   try {
   //     const products: Producto[] = await this.productRepository
