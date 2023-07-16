@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber } from "class-validator";
 import { Producto } from "src/producto/entities/producto.entity";
+import { Venta } from "src/venta/entities/venta.entity";
 
 export class CreateDetalleVentaDto {
 
@@ -9,5 +10,8 @@ export class CreateDetalleVentaDto {
     @IsNotEmpty()
     @IsNumber()
     producto: Producto;
+    @IsNotEmpty()
+    @IsNumber()
+    venta: Venta;
     
 }

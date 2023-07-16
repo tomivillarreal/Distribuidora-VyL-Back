@@ -1,14 +1,20 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { VentaService } from './venta.service';
 import { CreateVentaDto } from './dto/venta.dto';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ErrorManager } from '../utils/error.manager';
+import { Venta } from './entities/venta.entity';
 
 @Controller('venta')
 export class VentaController {
   constructor(private readonly ventaService: VentaService) {}
 
   @Post()
-  create(@Body() createVentaDto: CreateVentaDto) {
-    return this.ventaService.create(createVentaDto);
+  public async create(@Body() createVentaDto: Venta) {
+    const newVenta = await this.ventaService.create(createVentaDto)
+    return newVenta
   }
 
   @Get()
