@@ -1,14 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DetalleVentaService } from './detalle-venta.service';
 import { CreateDetalleVentaDto } from './dto/detalle-venta.dto';
+import { DetalleVenta } from './entities/detalle-venta.entity';
 
 @Controller('detalle-venta')
 export class DetalleVentaController {
   constructor(private readonly detalleVentaService: DetalleVentaService) {}
 
   @Post()
-  create(@Body() createDetalleVentaDto: CreateDetalleVentaDto) {
-    return this.detalleVentaService.create(createDetalleVentaDto);
+  public async create(@Body() createDetalleVentaDto: DetalleVenta) {
+    const newVenta = await this.detalleVentaService.create(
+      createDetalleVentaDto,
+    );
+    return newVenta;
   }
 
   @Get()
@@ -20,7 +32,6 @@ export class DetalleVentaController {
   findOne(@Param('id') id: string) {
     return this.detalleVentaService.findOne(+id);
   }
-
 
   @Delete(':id')
   remove(@Param('id') id: string) {
