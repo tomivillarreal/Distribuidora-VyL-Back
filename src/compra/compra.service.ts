@@ -1,20 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompraDto } from './dto/compra.dto';
+import { Compra } from './entities/compra.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class CompraService {
-  create(createCompraDto: CreateCompraDto) {
-    return 'This action adds a new compra';
+  constructor(
+    @InjectRepository(Compra)
+    private readonly compraRepository: Repository<Compra>,
+  ) {}
+
+  public async create(compra: Compra): Promise<Compra> {
+    try {
+      const newCompra = this.compraRepository.create(compra);
+      return await this.compraRepository.save(newCompra);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all compra`;
+  public async findAll(): Promise<Compra[]> {
+    try {
+      const compras: Compra[] = await this.compraRepository.find({
+        relations: ['detalleCompra'],
+      });
+      if (compras.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return compras;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   findOne(id: number) {
     return `This action returns a #${id} compra`;
   }
-
 
   remove(id: number) {
     return `This action removes a #${id} compra`;

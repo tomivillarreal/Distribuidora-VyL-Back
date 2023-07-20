@@ -31,6 +31,11 @@ export class ProductoController {
     return await this.productoService.findAll();
   }
 
+  // @Get()
+  // public async findAll(): Promise<Producto[]> {
+  //   return await this.productoService.findAll();
+  // }
+
   @Get('/venta')
   public async findAllVenta(): Promise<Producto[]> {
     return await this.productoService.findAllVenta();

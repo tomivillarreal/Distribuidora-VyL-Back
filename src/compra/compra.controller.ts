@@ -1,19 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CompraService } from './compra.service';
-import { CreateCompraDto } from './dto/compra.dto';
+import { Compra } from './entities/compra.entity';
+import { Cipher } from 'crypto';
 
 @Controller('compra')
 export class CompraController {
   constructor(private readonly compraService: CompraService) {}
 
   @Post()
-  create(@Body() createCompraDto: CreateCompraDto) {
-    return this.compraService.create(createCompraDto);
+  public async create(@Body() createCompraDto: Compra) {
+    const newCompra = await this.compraService.create(createCompraDto);
+    return newCompra;
   }
 
   @Get()
-  findAll() {
-    return this.compraService.findAll();
+  public async findAll(): Promise<Compra[]> {
+    return await this.compraService.findAll();
   }
 
   @Get(':id')

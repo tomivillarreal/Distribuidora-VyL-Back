@@ -21,8 +21,41 @@ export class DetalleVentaService {
     }
   }
 
-  findAll() {
-    return `This action returns all detalleVenta`;
+  public async findAll(): Promise<DetalleVenta[]> {
+    try {
+      const detalles: DetalleVenta[] = await this.detalleVentaRepository.find({
+        relations: ['venta'],
+      });
+      if (detalles.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return detalles;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findByVenta(idVenta: number): Promise<DetalleVenta[]> {
+    try {
+      const detalles: DetalleVenta[] = await this.detalleVentaRepository.find({
+        relations: ['producto', 'venta'],
+        where: {
+          venta: { id: idVenta },
+        },
+      });
+      if (detalles.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return detalles;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   findOne(id: number) {

@@ -43,20 +43,76 @@ export class ProductoService {
 
   public async findAll(): Promise<Producto[]> {
     try {
-      const products: Producto[] = await this.productRepository.find({
-        relations: ['estante', 'categoria', 'cambioPrecio'],
+      // const products = await this.productRepository
+      //   .createQueryBuilder('producto')
+
+      //   .getMany();
+
+      // if (products.length === 0) {
+      //   throw new ErrorManager({
+      //     type: 'BAD_REQUEST',
+      //     message: 'No se encontro resultado',
+      //   });
+      // }
+      // return products;
+
+      const productos = await this.productRepository.find({
+        select: ['id', 'nombre'],
+        relations: [
+          'detalleCompra',
+          'detalleVenta',
+          'estante',
+          'categoria',
+          'cambioPrecio',
+        ],
       });
-      if (products.length === 0) {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontro resultado',
-        });
-      }
-      return products;
+
+      const stockDisponible = productos.map((producto) => {
+        const cantidadComprada = producto.detalleCompra.reduce(
+          (total, detalleCompra) => total + detalleCompra.cantidad,
+          0,
+        );
+        const cantidadVendida = producto.detalleVenta.reduce(
+          (total, detalleVenta) => total + detalleVenta.cantidad,
+          0,
+        );
+        const stock = cantidadComprada - cantidadVendida;
+
+        return {
+          ...producto,
+          stock_disponible: stock,
+        };
+      });
+      return stockDisponible;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  // public async findAll(): Promise<Producto[]> {
+  //   try {
+  //     const products: Producto[] = await this.productRepository.find({
+  //       relations: ['estante', 'categoria', 'cambioPrecio'],
+  //     });
+  //     if (products.length === 0) {
+  //       throw new ErrorManager({
+  //         type: 'BAD_REQUEST',
+  //         message: 'No se encontro resultado',
+  //       });
+  //     }
+  //     return products;
+  //   } catch (error) {
+  //     throw ErrorManager.createSignatureError(error.message);
+  //   }
+  // }
+
+  //   SELECT
+  //   p.id,
+  //   p.nombre AS nombre_producto,
+  //   (SELECT COALESCE(SUM(cantidad), 0) FROM detalle_compra WHERE producto_id = p.id) -
+  //   (SELECT COALESCE(SUM(cantidad), 0) FROM detalle_venta WHERE producto_id = p.id) AS stock_disponible
+  // FROM
+  //   producto p;
 
   public async findAllVenta(): Promise<Producto[]> {
     try {

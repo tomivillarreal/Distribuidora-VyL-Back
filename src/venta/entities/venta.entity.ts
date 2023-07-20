@@ -1,15 +1,12 @@
-import { BaseEntity } from "../../config/base.entity";
-import { DetalleVenta } from "../../detalle-venta/entities/detalle-venta.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, Timestamp } from "typeorm";
+import { BaseTransactionEntity } from '../../config/base_transaccion.entity';
+import { DetalleVenta } from '../../detalle-venta/entities/detalle-venta.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
-export class Venta extends BaseEntity{  
+export class Venta extends BaseTransactionEntity {
+  @Column()
+  descripcion: string;
 
-    @Column()
-    descripcion: string
-
-    @OneToMany(()=> DetalleVenta , (detalleVenta) => detalleVenta.producto)
-    detalleVenta: DetalleVenta[]
-    
-
+  @OneToMany(() => DetalleVenta, (detalleVenta) => detalleVenta.producto)
+  detalleVenta: DetalleVenta[];
 }

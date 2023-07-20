@@ -1,14 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { DetalleVentaService } from './detalle-venta.service';
-import { CreateDetalleVentaDto } from './dto/detalle-venta.dto';
 import { DetalleVenta } from './entities/detalle-venta.entity';
 
 @Controller('detalle-venta')
@@ -24,8 +15,13 @@ export class DetalleVentaController {
   }
 
   @Get()
-  findAll() {
-    return this.detalleVentaService.findAll();
+  public async findAll(): Promise<DetalleVenta[]> {
+    return await this.detalleVentaService.findAll();
+  }
+
+  @Get('/venta:id')
+  public async findByVenta(id: number): Promise<DetalleVenta[]> {
+    return await this.detalleVentaService.findByVenta(id);
   }
 
   @Get(':id')

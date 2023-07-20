@@ -1,22 +1,11 @@
-import { BaseEntity } from "../../config/base.entity";
-import { DetalleCompra } from "../../detalle-compra/entities/detalle-compra.entity";
-import { Column, Entity, CreateDateColumn, OneToMany } from "typeorm";
+import { BaseTransactionEntity } from '../../config/base_transaccion.entity';
+import { DetalleCompra } from '../../detalle-compra/entities/detalle-compra.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
-export class Compra extends BaseEntity{  
-    // @CreateDateColumn({
-    //     type:'date',
-    //     name:'fecha'
-    // })
-    // fecha:Date;
-    // @CreateDateColumn({
-    //     type:'timestamp',
-    //     name:'hora'
-    // })
-    // hora:Date;
-    @Column()
-    descripcion: string
-    @OneToMany(()=> DetalleCompra , (detalleCompra) => detalleCompra.producto)
-    detalleCompra: DetalleCompra[]
-
+export class Compra extends BaseTransactionEntity {
+  @Column()
+  descripcion: string;
+  @OneToMany(() => DetalleCompra, (detalleCompra) => detalleCompra.producto)
+  detalleCompra: DetalleCompra[];
 }

@@ -1,19 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateVentaDto } from './dto/venta.dto';
 import { Venta } from './entities/venta.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
-import { ConsoleLogger } from '@nestjs/common';
-import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class VentaService {
   constructor(
     @InjectRepository(Venta)
-    private readonly ventaRepository: Repository<Venta>
+    private readonly ventaRepository: Repository<Venta>,
   ) {}
-
 
   public async create(venta: Venta): Promise<Venta> {
     try {
@@ -24,9 +20,21 @@ export class VentaService {
     }
   }
 
-
-  findAll() {
-    return `This action returns all venta`;
+  public async findAll(): Promise<Venta[]> {
+    try {
+      const ventas: Venta[] = await this.ventaRepository.find({
+        relations: ['detalleVenta'],
+      });
+      if (ventas.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return ventas;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   findOne(id: number) {

@@ -1,21 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { DetalleCompraService } from './detalle-compra.service';
-import { CreateDetalleCompraDto } from './dto/detalle-compra.dto';
+import { DetalleCompra } from './entities/detalle-compra.entity';
 
 @Controller('detalle-compra')
 export class DetalleCompraController {
   constructor(private readonly detalleCompraService: DetalleCompraService) {}
 
   @Post()
-  create(@Body() createDetalleCompraDto: CreateDetalleCompraDto) {
-    return this.detalleCompraService.create(createDetalleCompraDto);
+  public async create(@Body() createDetalleCompraDto: DetalleCompra) {
+    const newVenta = await this.detalleCompraService.create(
+      createDetalleCompraDto,
+    );
+    return newVenta;
   }
 
   @Get()
-  findAll() {
-    return this.detalleCompraService.findAll();
+  public async findAll(): Promise<DetalleCompra[]> {
+    return await this.detalleCompraService.findAll();
   }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.detalleCompraService.findOne(+id);
