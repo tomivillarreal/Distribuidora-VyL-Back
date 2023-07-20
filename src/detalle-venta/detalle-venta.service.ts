@@ -45,13 +45,15 @@ export class DetalleVentaService {
         where: {
           venta: { id: idVenta },
         },
-      });
+      })
+      ;
       if (detalles.length === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: 'No se encontro resultado',
         });
       }
+      console.log(detalles)
       return detalles;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);

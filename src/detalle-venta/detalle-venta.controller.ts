@@ -20,7 +20,7 @@ export class DetalleVentaController {
   }
 
   @Get('/venta:id')
-  public async findByVenta(id: number): Promise<DetalleVenta[]> {
+  public async findByVenta(@Param('id') id: number): Promise<DetalleVenta[]> {
     return await this.detalleVentaService.findByVenta(id);
   }
 

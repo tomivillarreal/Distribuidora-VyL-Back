@@ -13,8 +13,8 @@ export class VentaController {
   }
 
   @Get()
-  public async findAll(): Promise<Venta[]> {
-    return await this.ventaService.findAll();
+  public async obtenerTodasLasVentas(): Promise<Venta[]> {
+    return await this.ventaService.obtenerTodasLasVentas();
   }
 
   @Get(':id')

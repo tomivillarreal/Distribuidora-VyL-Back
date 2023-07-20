@@ -3,12 +3,15 @@ import { Venta } from './entities/venta.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/utils/error.manager';
+import { DetalleVenta } from 'src/detalle-venta/entities/detalle-venta.entity';
 
 @Injectable()
 export class VentaService {
   constructor(
     @InjectRepository(Venta)
     private readonly ventaRepository: Repository<Venta>,
+
+
   ) {}
 
   public async create(venta: Venta): Promise<Venta> {
@@ -36,6 +39,11 @@ export class VentaService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async obtenerTodasLasVentas(): Promise<Venta[]> {
+    return this.ventaRepository.find({ relations: ['detalleVenta', 'detalleVenta.producto'] });
+  }
+
 
   findOne(id: number) {
     return `This action returns a #${id} venta`;

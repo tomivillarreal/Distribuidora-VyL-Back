@@ -7,6 +7,6 @@ export class Venta extends BaseTransactionEntity {
   @Column()
   descripcion: string;
 
-  @OneToMany(() => DetalleVenta, (detalleVenta) => detalleVenta.producto)
+  @OneToMany(() => DetalleVenta, (detalleVenta) => detalleVenta.venta)
   detalleVenta: DetalleVenta[];
 }
