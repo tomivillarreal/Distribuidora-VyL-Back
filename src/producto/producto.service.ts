@@ -115,20 +115,45 @@ export class ProductoService {
   //   producto p;
 
   public async findAllVenta(): Promise<Producto[]> {
-    try {
-      const products: Producto[] = await this.productRepository.find({
-        relations: ['cambioPrecio'],
-      });
-      if (products.length === 0) {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontro resultado',
-        });
-      }
-      return products;
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
+    // try {
+    //   const products: Producto[] = await this.productRepository.find({
+    //     relations: ['cambioPrecio'],
+    //   });
+    //   if (products.length === 0) {
+    //     throw new ErrorManager({
+    //       type: 'BAD_REQUEST',
+    //       message: 'No se encontro resultado',
+    //     });
+    //   }
+    //   return products;
+    // } catch (error) {
+    //   throw ErrorManager.createSignatureError(error.message);
+    // }
+
+    const productos = await this.productRepository.find({
+      relations: ['detalleCompra', 'detalleVenta', 'cambioPrecio'],
+    });
+
+    const stockDisponible = productos.map((producto) => {
+      const cantidadComprada = producto.detalleCompra.reduce(
+        (total, detalleCompra) => total + detalleCompra.cantidad,
+        0,
+      );
+      const cantidadVendida = producto.detalleVenta.reduce(
+        (total, detalleVenta) => total + detalleVenta.cantidad,
+        0,
+      );
+      const stock = cantidadComprada - cantidadVendida;
+
+      return {
+        ...producto,
+        stock_disponible: stock,
+      };
+    });
+    return stockDisponible;
+  }
+  catch(error) {
+    throw ErrorManager.createSignatureError(error.message);
   }
 
   // public async findAll(): Promise<Producto[]> {

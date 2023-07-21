@@ -39,6 +39,29 @@ export class DetalleCompraService {
     }
   }
 
+  public async findByCompra(idCompra: number): Promise<DetalleCompra[]> {
+    try {
+      const detalles: DetalleCompra[] = await this.detalleCompraRepository.find(
+        {
+          relations: ['producto', 'compra'],
+          where: {
+            compra: { id: idCompra },
+          },
+        },
+      );
+      if (detalles.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      console.log(detalles);
+      return detalles;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} detalleCompra`;
   }

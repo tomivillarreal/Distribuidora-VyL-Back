@@ -18,6 +18,12 @@ export class DetalleCompraController {
   public async findAll(): Promise<DetalleCompra[]> {
     return await this.detalleCompraService.findAll();
   }
+
+  @Get('/compra:id')
+  public async findByCompra(@Param('id') id: number): Promise<DetalleCompra[]> {
+    return await this.detalleCompraService.findByCompra(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.detalleCompraService.findOne(+id);
