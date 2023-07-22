@@ -13,9 +13,14 @@ export class CompraController {
     return newCompra;
   }
 
+  // @Get()
+  // public async findAll(): Promise<Compra[]> {
+  //   return await this.compraService.findAll();
+  // }
+
   @Get()
-  public async findAll(): Promise<Compra[]> {
-    return await this.compraService.findAll();
+  public async obtenerTodasLasCompras(): Promise<Compra[]> {
+    return await this.compraService.obtenerTodasLasCompras();
   }
 
   @Get(':id')

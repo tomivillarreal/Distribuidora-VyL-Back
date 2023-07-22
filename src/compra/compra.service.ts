@@ -37,6 +37,12 @@ export class CompraService {
     }
   }
 
+  public async obtenerTodasLasCompras(): Promise<Compra[]> {
+    return this.compraRepository.find({
+      relations: ['detalleCompra', 'detalleCompra.producto'],
+    });
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} compra`;
   }

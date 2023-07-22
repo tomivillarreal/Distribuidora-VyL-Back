@@ -6,6 +6,6 @@ import { Column, Entity, OneToMany } from 'typeorm';
 export class Compra extends BaseTransactionEntity {
   @Column()
   descripcion: string;
-  @OneToMany(() => DetalleCompra, (detalleCompra) => detalleCompra.producto)
+  @OneToMany(() => DetalleCompra, (detalleCompra) => detalleCompra.compra)
   detalleCompra: DetalleCompra[];
 }
