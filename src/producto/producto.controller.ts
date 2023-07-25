@@ -48,10 +48,10 @@ export class ProductoController {
 
   @Put(':id')
   public async update(
-    @Param('id') id: string,
-    @Body() productoActualizado: UpdateProductoDto,
+    @Param('id') id: number,
+    @Body() productoActualizado: Producto,
   ) {
-    const product = await this.productoService.update(+id, productoActualizado);
+    const product = await this.productoService.update(id, productoActualizado);
     return product;
   }
 
@@ -60,8 +60,15 @@ export class ProductoController {
     return await this.productoService.remove(id);
   }
 
-  @Get('estante/:id')
+  @Get('/estante/:id')
   public async findAllByEstante(@Param('id') id: number): Promise<Producto[]> {
     return await this.productoService.findAllByEstante(id);
+  }
+
+  @Get('/categoria/:id')
+  public async findAllByCategoria(
+    @Param('id') id: number,
+  ): Promise<Producto[]> {
+    return await this.productoService.findAllByCategoria(id);
   }
 }

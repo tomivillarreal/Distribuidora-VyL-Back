@@ -7,100 +7,105 @@ import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class EstanteService {
-
-  constructor(@InjectRepository(Estante) private estanteRepository: Repository<Estante>) { }
+  constructor(
+    @InjectRepository(Estante) private estanteRepository: Repository<Estante>,
+  ) {}
 
   public async create(estante: CreateEstanteDto): Promise<Estante> {
     try {
-      const newEstante = this.estanteRepository.create(estante)
-      return await this.estanteRepository.save(newEstante)
+      const newEstante = this.estanteRepository.create(estante);
+      return await this.estanteRepository.save(newEstante);
     } catch (error) {
-      throw new ErrorManager.createSignatureError(error.message)
+      throw new ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findAll(): Promise<Estante[]> {
     try {
-      const estantes: Estante[] = await this.estanteRepository.find()
-      if (estantes.length === 0){
+      const estantes: Estante[] = await this.estanteRepository.find();
+      if (estantes.length === 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
-      return estantes
+      return estantes;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findOne(id: string): Promise<Estante> {
     try {
-      const estante: Estante = await this.estanteRepository.
-      createQueryBuilder('estante')
-      .where({id})
-      .getOne()
-      if (!estante){
+      const estante: Estante = await this.estanteRepository
+        .createQueryBuilder('estante')
+        .where({ id })
+        .getOne();
+      if (!estante) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
 
-      return estante
+      return estante;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
-  
+
   public async findOneByName(name: string): Promise<Estante> {
     try {
-      const estante: Estante = await this.estanteRepository.
-      createQueryBuilder('estante')
-      .where('estante.nombre = :name', { name })
-      .getOne()
-      if (!estante){
+      const estante: Estante = await this.estanteRepository
+        .createQueryBuilder('estante')
+        .where('estante.nombre = :name', { name })
+        .getOne();
+      if (!estante) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se encontro resultado'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
       }
 
-      return estante
+      return estante;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async update(id: string, updatedEstante: UpdateEstanteDto): Promise<UpdateResult | undefined>  {
+  public async update(
+    id: string,
+    updatedEstante: UpdateEstanteDto,
+  ): Promise<UpdateResult | undefined> {
     try {
-      const estante: UpdateResult = await this.estanteRepository.update(id, updatedEstante)
-      if (estante.affected == 0 ){
+      const estante: UpdateResult = await this.estanteRepository.update(
+        id,
+        updatedEstante,
+      );
+      if (estante.affected == 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se pudo actualizar'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se pudo actualizar',
+        });
       }
-      return estante
+      return estante;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async remove(id: string): Promise<DeleteResult | undefined>  {
+  public async remove(id: string): Promise<DeleteResult | undefined> {
     try {
-      const estante: DeleteResult = await this.estanteRepository.delete(id)
-      if (estante.affected == 0 ){
+      const estante: DeleteResult = await this.estanteRepository.delete(id);
+      if (estante.affected == 0) {
         throw new ErrorManager({
-          type:'BAD_REQUEST',
-          message: 'No se pudo borrar'
-        })
+          type: 'BAD_REQUEST',
+          message: 'No se pudo borrar',
+        });
       }
-      return estante
+      return estante;
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message)
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
-
-
 }

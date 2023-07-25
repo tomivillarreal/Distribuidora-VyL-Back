@@ -24,9 +24,35 @@ export class ProductoService {
   public async findAllByEstante(idEstante: number): Promise<Producto[]> {
     try {
       const products: Producto[] = await this.productRepository.find({
-        relations: ['estante', 'categoria'],
+        relations: ['estante', 'categoria', 'cambioPrecio'],
+        order: {
+          id: 'ASC',
+        },
         where: {
           estante: { id: idEstante },
+        },
+      });
+      if (!products) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontro resultado',
+        });
+      }
+      return products;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findAllByCategoria(idCategoria: number): Promise<Producto[]> {
+    try {
+      const products: Producto[] = await this.productRepository.find({
+        relations: ['estante', 'categoria', 'cambioPrecio'],
+        order: {
+          id: 'ASC',
+        },
+        where: {
+          categoria: { id: idCategoria },
         },
       });
       if (!products) {
@@ -57,7 +83,7 @@ export class ProductoService {
       // return products;
 
       const productos = await this.productRepository.find({
-        select: ['id', 'nombre'],
+        select: ['id', 'nombre', 'foto', 'descripcion'],
         relations: [
           'detalleCompra',
           'detalleVenta',
@@ -203,10 +229,10 @@ export class ProductoService {
 
   public async update(
     id: number,
-    updatedProduct: UpdateProductoDto,
+    updatedProduct: Producto,
   ): Promise<UpdateResult | undefined> {
     try {
-      updatedProduct.updatedAt = new Date();
+      // updatedProduct.updatedAt = new Date();
       const product: UpdateResult = await this.productRepository.update(
         id,
         updatedProduct,
