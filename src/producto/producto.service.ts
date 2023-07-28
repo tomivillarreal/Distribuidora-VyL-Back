@@ -106,6 +106,7 @@ export class ProductoService {
 
         return {
           ...producto,
+          foto: `http://localhost:8000/imagen/${producto.foto}`,
           stock_disponible: stock,
         };
       });

@@ -12,21 +12,31 @@ import { VentaModule } from './venta/venta.module';
 import { DetalleVentaModule } from './detalle-venta/detalle-venta.module';
 import { CompraModule } from './compra/compra.module';
 import { DetalleCompraModule } from './detalle-compra/detalle-compra.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { Imagen } from './imagen/imagen';
 @Module({
-  imports: [ProductoModule,CategoriaModule, EstanteModule, CambioPrecioModule, 
-    ConfigModule.forRoot({ 
-    isGlobal : true, 
-    envFilePath: `.${process.env.NODE_ENV}.env`
-  }),
-    TypeOrmModule.forRoot({...DataSourceConfig}),
+  imports: [
+    ProductoModule,
+    CategoriaModule,
+    EstanteModule,
+    CambioPrecioModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+    }),
+    TypeOrmModule.forRoot({ ...DataSourceConfig }),
     VentaModule,
     DetalleVentaModule,
     CompraModule,
-    DetalleCompraModule],
+    DetalleCompraModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Imagen],
 })
-export class AppModule {
 
-}
+// ServeStaticModule.forRoot({
+//   rootPath: join(__dirname, '..'),
+//   renderPath: '/files',
+// }),
+export class AppModule {}

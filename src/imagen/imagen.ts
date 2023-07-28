@@ -1,25 +1,14 @@
 import {
-  Controller,
-  Get,
+  Injectable,
   Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { fileURLToPath } from 'url';
-import * as path from 'path';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
+@Injectable()
+export class Imagen {
   @Post('file')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -32,9 +21,11 @@ export class AppController {
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
     return {
       msg: `archivo ${file.filename} subido`,
-      nombre: file.filename,
+      ruta: file.path,
+      asd: file.destination,
     };
   }
 }
