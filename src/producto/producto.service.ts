@@ -4,18 +4,33 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from '../utils/error.manager';
-
+import { CambioPrecio } from 'src/cambio-precio/entities/cambio-precio.entity';
+import { CreateCambioPrecioDto } from 'src/cambio-precio/dto/cambio-precio.dto';
 @Injectable()
 export class ProductoService {
   constructor(
     @InjectRepository(Producto)
     private readonly productRepository: Repository<Producto>,
+    @InjectRepository(CambioPrecio)
+    private readonly cambioPrecioRepository: Repository<CambioPrecio>,
   ) {}
 
-  public async create(product: CreateProductoDto): Promise<Producto> {
+  public async create(producto: Producto, precio: number): Promise<Producto> {
     try {
-      const newProduct = this.productRepository.create(product);
-      return await this.productRepository.save(newProduct);
+      const productoDto = {
+        ...producto,
+        precio: undefined,
+      };
+
+      const product = await this.productRepository.create(productoDto);
+      const savedProduct = await this.productRepository.save(product);
+      const cambioPrecio = new CambioPrecio();
+      cambioPrecio.precio = precio;
+      cambioPrecio.producto = savedProduct;
+
+      await this.cambioPrecioRepository.save(cambioPrecio);
+
+      return savedProduct;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -27,6 +42,7 @@ export class ProductoService {
         relations: ['estante', 'categoria', 'cambioPrecio'],
         order: {
           id: 'ASC',
+          cambioPrecio: { id: 'ASC' },
         },
         where: {
           estante: { id: idEstante },
@@ -50,6 +66,7 @@ export class ProductoService {
         relations: ['estante', 'categoria', 'cambioPrecio'],
         order: {
           id: 'ASC',
+          cambioPrecio: { id: 'ASC' },
         },
         where: {
           categoria: { id: idCategoria },
@@ -69,21 +86,12 @@ export class ProductoService {
 
   public async findAll(): Promise<Producto[]> {
     try {
-      // const products = await this.productRepository
-      //   .createQueryBuilder('producto')
-
-      //   .getMany();
-
-      // if (products.length === 0) {
-      //   throw new ErrorManager({
-      //     type: 'BAD_REQUEST',
-      //     message: 'No se encontro resultado',
-      //   });
-      // }
-      // return products;
-
       const productos = await this.productRepository.find({
         select: ['id', 'nombre', 'foto', 'descripcion'],
+        order: {
+          id: 'ASC',
+          cambioPrecio: { id: 'ASC' },
+        },
         relations: [
           'detalleCompra',
           'detalleVenta',
@@ -142,21 +150,6 @@ export class ProductoService {
   //   producto p;
 
   public async findAllVenta(): Promise<Producto[]> {
-    // try {
-    //   const products: Producto[] = await this.productRepository.find({
-    //     relations: ['cambioPrecio'],
-    //   });
-    //   if (products.length === 0) {
-    //     throw new ErrorManager({
-    //       type: 'BAD_REQUEST',
-    //       message: 'No se encontro resultado',
-    //     });
-    //   }
-    //   return products;
-    // } catch (error) {
-    //   throw ErrorManager.createSignatureError(error.message);
-    // }
-
     const productos = await this.productRepository.find({
       relations: ['detalleCompra', 'detalleVenta', 'cambioPrecio'],
     });
@@ -230,29 +223,27 @@ export class ProductoService {
 
   public async update(
     id: number,
-    updatedProduct: Producto,
+    producData: Producto,
+    precio: number,
   ): Promise<UpdateResult | undefined> {
-    try {
-      // updatedProduct.updatedAt = new Date();
-      const product: UpdateResult = await this.productRepository.update(
-        id,
-        updatedProduct,
-      );
-      if (product.affected == 0) {
-        console.log('No se actualizo');
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar',
-        });
-      }
-      console.log('Se actualizo');
-      console.log(product);
-      return product;
-    } catch (error) {
-      console.log('Error');
-      console.log(error.message);
-      throw ErrorManager.createSignatureError(error.message);
+    const existingProduct = await this.productRepository.findOne({
+      relations: ['cambioPrecio'],
+      where: { id: id },
+    });
+    if (
+      existingProduct.cambioPrecio[existingProduct.cambioPrecio.length - 1]
+        .precio !== precio
+    ) {
+      console.log('Hubo cambio de precio');
+      const newPriceChange = new CambioPrecio();
+      newPriceChange.precio = precio;
+      newPriceChange.producto = existingProduct;
+      await this.cambioPrecioRepository.save(newPriceChange);
     }
+
+    const updatedProduct = { ...producData, cambioPrecio: undefined };
+    console.log('return');
+    return await this.productRepository.update(id, updatedProduct);
   }
 
   public async remove(id: string): Promise<DeleteResult | undefined> {

@@ -3,13 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
 } from '@nestjs/common';
 import { ProductoService } from './producto.service';
-import { CreateProductoDto, UpdateProductoDto } from './dto/producto.dto';
 import { Producto } from './entities/producto.entity';
 import { CambioPrecioService } from 'src/cambio-precio/cambio-precio.service';
 
@@ -21,8 +19,11 @@ export class ProductoController {
   ) {}
 
   @Post()
-  public async create(@Body() nuevoProducto: CreateProductoDto) {
-    const newProduct = await this.productoService.create(nuevoProducto);
+  public async create(
+    @Body('param1') param1: Producto,
+    @Body('param2') param2: number,
+  ) {
+    const newProduct = await this.productoService.create(param1, param2);
     return newProduct;
   }
 
@@ -49,9 +50,14 @@ export class ProductoController {
   @Put(':id')
   public async update(
     @Param('id') id: number,
-    @Body() productoActualizado: Producto,
+    @Body('param1') productoActualizado: Producto,
+    @Body('param2') precio: number,
   ) {
-    const product = await this.productoService.update(id, productoActualizado);
+    const product = await this.productoService.update(
+      id,
+      productoActualizado,
+      precio,
+    );
     return product;
   }
 

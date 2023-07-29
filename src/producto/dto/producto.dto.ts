@@ -1,14 +1,5 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  IsOptional,
-  IsNumber,
-} from 'class-validator';
-import { CambioPrecio } from 'src/cambio-precio/entities/cambio-precio.entity';
+import { IsNotEmpty, IsString, IsOptional, IsNumber } from 'class-validator';
 import { Categoria } from 'src/categoria/entities/categoria.entity';
-import { Compra } from 'src/compra/entities/compra.entity';
-import { DetalleCompra } from 'src/detalle-compra/entities/detalle-compra.entity';
 import { Estante } from 'src/estante/entities/estante.entity';
 
 export class CreateProductoDto {
