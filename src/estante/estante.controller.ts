@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { EstanteService } from './estante.service';
 import { CreateEstanteDto, UpdateEstanteDto } from './dto/estante.dto';
-
 
 @Controller('estante')
 export class EstanteController {
@@ -10,7 +18,6 @@ export class EstanteController {
   @Post()
   public async create(@Body() createEstanteDto: CreateEstanteDto) {
     return await this.estanteService.create(createEstanteDto);
-
   }
 
   @Get()
@@ -28,8 +35,11 @@ export class EstanteController {
     return this.estanteService.findOneByName(name);
   }
 
-  @Patch(':id')
-  public async update(@Param('id') id: string, @Body() updateEstanteDto: UpdateEstanteDto) {
+  @Put(':id')
+  public async update(
+    @Param('id') id: number,
+    @Body() updateEstanteDto: UpdateEstanteDto,
+  ) {
     return await this.estanteService.update(id, updateEstanteDto);
   }
 

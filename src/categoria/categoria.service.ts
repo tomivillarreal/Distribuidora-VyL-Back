@@ -23,7 +23,9 @@ export class CategoriaService {
 
   public async findAll(): Promise<Categoria[]> {
     try {
-      const categorias: Categoria[] = await this.categoriaRepository.find();
+      const categorias: Categoria[] = await this.categoriaRepository.find({
+        order: { id: 'ASC' },
+      });
       if (categorias.length === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',

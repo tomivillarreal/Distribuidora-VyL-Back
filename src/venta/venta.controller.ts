@@ -17,6 +17,11 @@ export class VentaController {
     return await this.ventaService.obtenerTodasLasVentas();
   }
 
+  @Get('/hoy')
+  public async findAllDaily(): Promise<Venta[]> {
+    return await this.ventaService.findAllDaily();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ventaService.findOne(+id);

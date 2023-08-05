@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { CategoriaService } from './categoria.service';
 import { CreateCategoriaDto, UpdateCategoriaDto } from './dto/categoria.dto';
@@ -34,7 +35,7 @@ export class CategoriaController {
     return this.categoriaService.findOneByName(name);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateCategoriaDto: UpdateCategoriaDto,

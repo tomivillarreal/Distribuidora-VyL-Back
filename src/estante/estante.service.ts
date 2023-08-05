@@ -22,7 +22,9 @@ export class EstanteService {
 
   public async findAll(): Promise<Estante[]> {
     try {
-      const estantes: Estante[] = await this.estanteRepository.find();
+      const estantes: Estante[] = await this.estanteRepository.find({
+        order: { id: 'ASC' },
+      });
       if (estantes.length === 0) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
@@ -74,7 +76,7 @@ export class EstanteService {
   }
 
   public async update(
-    id: string,
+    id: number,
     updatedEstante: UpdateEstanteDto,
   ): Promise<UpdateResult | undefined> {
     try {
