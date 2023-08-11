@@ -15,7 +15,7 @@ async function bootstrap() {
   // console.log(staticDir);
   // app.use('/static', express.static(staticDir));
   app.enableCors({
-    origin: 'http://localhost:4200', // Aquí especifica los orígenes permitidos
+    origin: ['http://localhost:4200', 'http://localhost:8080'], // Aquí especifica los orígenes permitidos
     // other options if needed
   });
 

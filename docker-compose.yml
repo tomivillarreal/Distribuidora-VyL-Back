@@ -1,3 +1,27 @@
+# version: '3.1'
+
+# services:
+#   distribuidoraDB:
+#     image: postgres:15.3
+#     container_name: distribuidoraDB
+#     restart: always
+#     environment:
+#       POSTGRES_DB: distribuidoraDB
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: 1234
+#       TZ: America/Argentina/Buenos_Aires
+#     volumes:
+#       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+#     ports:
+#       - 5432:5432
+
+#   nestjs-app:
+#   build:
+#     context: .
+#     dockerfile: Dockerfile
+#   depends_on:
+#     - distribuidoraDB
+
 version: '3.1'
 
 services:
@@ -14,3 +38,20 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      - DB_HOST=distribuidoraDB
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+      - PORT=8000
+    volumes:
+      - .:/app
+networks:
+  my_network:
